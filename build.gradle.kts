@@ -5,10 +5,11 @@ plugins {
     application
 }
 
-group = "hp.gr.java_conf.hiron"
+group = "jp.gr.java_conf.hiron"
 version = "1.0-SNAPSHOT"
 
 repositories {
+
     mavenCentral()
 }
 

@@ -1,3 +1,4 @@
+import java.io.BufferedReader
 import java.io.File
 import java.io.FilenameFilter
 import java.util.*
@@ -8,8 +9,8 @@ fun main(args: Array<String>) {
     println("余計なファイルがないこと、順序が正しいことを確認してください")
     print("よろしいですか?(yes/ ) ")
     if(readLine().equals("yes") ) {
-        //実行する
-        println("executing...")
+        // テキストファイルを読み込む
+        readTextFile(File("./README.md")).forEach{println(">  $it")}
     } else {
         //何もしないで終了する
         return
@@ -37,5 +38,16 @@ fun fileList(dirName: String) : Array<String> {
     fileList.forEach { fileName ->
         println(fileName)
     }
+
     return fileList
+}
+
+fun readTextFile(file: File) : MutableList<String>{
+
+    val inputStream = file.inputStream()
+    val lineList = mutableListOf<String>()
+
+    inputStream.bufferedReader().forEachLine { lineList.add(it) }
+
+    return lineList
 }
