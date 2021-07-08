@@ -2,6 +2,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FilenameFilter
 import java.util.*
+import kotlin.contracts.contract
 
 fun main(args: Array<String>) {
     //引数で渡されたディレクトリのファイルリストを取得する
@@ -17,9 +18,10 @@ fun main(args: Array<String>) {
     }
 }
 
-/// fileList
-/// 引数で渡されたディレクトリのファイル一覧を返す
-/// ただし、tree.txtは除外する
+/* fileList
+ 引数で渡されたディレクトリのファイル一覧を返す
+ ただし、tree.txtは除外する
+ */
 fun fileList(dirName: String) : Array<String> {
 
     val filter = FilenameFilter { _, str -> //指定文字列でフィルタする
@@ -29,7 +31,6 @@ fun fileList(dirName: String) : Array<String> {
 
     // ファイル一覧を取得するディレクトリ
     val dir = File(dirName)
-
     //Fileクラスのlistメソッドを使用してファイル一覧を取得する
     val fileList = dir.list(filter) ?: return arrayOf("")
     Arrays.sort(fileList)
@@ -38,16 +39,26 @@ fun fileList(dirName: String) : Array<String> {
     fileList.forEach { fileName ->
         println(fileName)
     }
-
     return fileList
 }
 
-fun readTextFile(file: File) : MutableList<String>{
+/* readTextFile
+    テキストファイルを改行区切りで文字列コレクション型で返す
+    行の先頭が"/"の行を最後に、それ以降はコレクションに加えない
+ */
+fun readTextFile(file: File) : MutableList<String> {
 
     val inputStream = file.inputStream()
     val lineList = mutableListOf<String>()
+    var doAdd = true
 
-    inputStream.bufferedReader().forEachLine { lineList.add(it) }
-
+    inputStream.bufferedReader().forEachLine {
+        if(it.isNotEmpty() && doAdd) {
+            lineList.add(it)
+            if(it[0] == '/') {
+                doAdd = false
+            }
+        }
+    }
     return lineList
 }
