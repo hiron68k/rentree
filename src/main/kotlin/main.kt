@@ -1,8 +1,5 @@
-import java.io.BufferedReader
-import java.io.File
-import java.io.FilenameFilter
+import java.io.*
 import java.util.*
-import kotlin.contracts.contract
 
 fun main(args: Array<String>) {
     //引数で渡されたディレクトリのファイルリストを取得する
@@ -10,6 +7,8 @@ fun main(args: Array<String>) {
     println("余計なファイルがないこと、順序が正しいことを確認してください")
     print("よろしいですか?(yes/ ) ")
     if(readLine().equals("yes") ) {
+        // 変更前ファイル名を保存
+            backupOldName(dirList)
         // テキストファイルを読み込む
         readTextFile(File("./README.md")).forEach{println(">  $it")}
     } else {
@@ -61,4 +60,14 @@ fun readTextFile(file: File) : MutableList<String> {
         }
     }
     return lineList
+}
+
+fun backupOldName(dirList: Array<String>) {
+    val fw = FileWriter("oldtree.txt")
+    val pw = PrintWriter(BufferedWriter(fw))
+
+    dirList.forEach {
+        pw.println(it)
+    }
+    pw.close()
 }
