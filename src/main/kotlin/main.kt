@@ -1,7 +1,7 @@
 import java.io.*
 import java.util.*
 
-fun main() {
+fun main(args: Array<String>) {
     //引数で渡されたディレクトリのファイルリストを取得する
     val dirList = fileList(".")
     println("余計なファイルがないこと、順序が正しいことを確認してください")
