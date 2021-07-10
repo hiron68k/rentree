@@ -1,16 +1,18 @@
 import java.io.*
 import java.util.*
 
-fun main(args: Array<String>) {
+fun main() {
     //引数で渡されたディレクトリのファイルリストを取得する
-    val dirList = fileList(args[0])
+    val dirList = fileList(".")
     println("余計なファイルがないこと、順序が正しいことを確認してください")
     print("よろしいですか?(yes/ ) ")
     if(readLine().equals("yes") ) {
         // 変更前ファイル名を保存
-            backupOldName(dirList)
-        // テキストファイルを読み込む
-        readTextFile(File("./README.md")).forEach{println(">  $it")}
+        backupOldNames(dirList)
+        //テキストファイルを読み込む
+        val newNames = readTextFile(File("tree.txt"))
+        // 変名
+        renameFiles(dirList, newNames)
     } else {
         //何もしないで終了する
         return
@@ -62,12 +64,27 @@ fun readTextFile(file: File) : MutableList<String> {
     return lineList
 }
 
-fun backupOldName(dirList: Array<String>) {
-    val fw = FileWriter("oldtree.txt")
+/*  backupOldNames
+    変更前のファイル名のリストをテキストファイルに保存する
+ */
+fun backupOldNames(dirList: Array<String>) {
+    val fw = FileWriter("oldtree.txt")  // filtering by fileList()
     val pw = PrintWriter(BufferedWriter(fw))
 
     dirList.forEach {
         pw.println(it)
     }
     pw.close()
+}
+
+/*  renameFiles
+    ターゲットディレクトリの全ファイルを変更
+ */
+fun renameFiles(dirList: Array<String>, newNames: MutableList<String>) {
+
+    var i = 0
+    dirList.forEach {
+        //ファイル名変更実行
+        File(it).renameTo(File(newNames[i++]))
+    }
 }
