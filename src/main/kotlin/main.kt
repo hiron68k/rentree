@@ -1,4 +1,6 @@
 import java.io.*
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 fun main(args: Array<String>) {
@@ -53,7 +55,9 @@ fun readTextFile(file: File) : MutableList<String> {
     val newNames = mutableListOf<String>()
     var doAdd = true
 
-    inputStream.bufferedReader().forEachLine {
+    // Windows Power Shellのコンソールから吐いたテキストファイルは、UTF-16LEらしい
+    // UTF_16LEを指定すると、１行目の先頭にBOMが付与されてしまうため、UTF_16とする
+    inputStream.bufferedReader(StandardCharsets.UTF_16).forEachLine {
         if(it.isNotEmpty() && doAdd) {
             newNames.add(it)
             if(it[0] == '/') {
