@@ -1,2 +1,2 @@
 @echo off
-java -jar c:\app\rentree.jar
+java -jar %~dp0rentree.jar
