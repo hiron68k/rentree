@@ -13,7 +13,8 @@ Place the above three files in a folder that is in your path
 ## Usage
 1. Move current directory to target directory.
 2. create `tree.txt` file (ex. maketree.bat)
-3. rentree
+3. modify tree.txt
+4. rentree.bat
 
 ## Encode
 `tree` command output UTF-16 Text.  
