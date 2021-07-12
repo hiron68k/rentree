@@ -2,6 +2,14 @@
 
 Rename all files in the target directory with the contents of `./tree.txt`.
 
+## Prepare
+
+- maketree.bat
+- rentree.bat
+- rentree.jar
+
+Place the above three files in a folder that is in your path
+
 ## Usage
 1. Move current directory to target directory.
 2. create `tree.txt` file (ex. maketree.bat)
