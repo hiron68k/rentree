@@ -50,18 +50,19 @@ fun fileList(dirName: String) : Array<String> {
 fun readTextFile(file: File) : MutableList<String> {
 
     val inputStream = file.inputStream()
-    val lineList = mutableListOf<String>()
+    val newNames = mutableListOf<String>()
     var doAdd = true
 
     inputStream.bufferedReader().forEachLine {
         if(it.isNotEmpty() && doAdd) {
-            lineList.add(it)
+            newNames.add(it)
             if(it[0] == '/') {
                 doAdd = false
             }
+            println("tree.txt: $it")
         }
     }
-    return lineList
+    return newNames
 }
 
 /*  backupOldNames
@@ -85,6 +86,7 @@ fun renameFiles(dirList: Array<String>, newNames: MutableList<String>) {
     var i = 0
     dirList.forEach {
         //ファイル名変更実行
+        println("renaming: $it <- " + newNames[i])
         File(it).renameTo(File(newNames[i++]))
     }
 }
