@@ -6,18 +6,17 @@ import java.util.*
 fun main(args: Array<String>) {
     //引数で渡されたディレクトリのファイルリストを取得する
     val dirList = fileList(".")
-    println("余計なファイルがないこと、順序が正しいことを確認してください")
-    print("よろしいですか?(yes/ ) ")
-    if(readLine().equals("yes") ) {
+    //テキストファイルを読み込む
+    val newNames = readTextFile(File("tree.txt"))
+
+    if(confirm(dirList, newNames)) {
         // 変更前ファイル名を保存
         backupOldNames(dirList)
-        //テキストファイルを読み込む
-        val newNames = readTextFile(File("tree.txt"))
         // 変名
         renameFiles(dirList, newNames)
     } else {
         //何もしないで終了する
-        return
+        println("処理がキャンセルされました")
     }
 }
 
@@ -38,10 +37,6 @@ fun fileList(dirName: String) : Array<String> {
     val fileList = dir.list(filter) ?: return arrayOf("")
     Arrays.sort(fileList)
 
-    // 取得したファイル一覧を表示する
-    fileList.forEach { fileName ->
-        println(fileName)
-    }
     return fileList
 }
 
@@ -57,13 +52,13 @@ fun readTextFile(file: File) : MutableList<String> {
 
     // Windows Power Shellのコンソールから吐いたテキストファイルは、UTF-16LEらしい
     // UTF_16LEを指定すると、１行目の先頭にBOMが付与されてしまうため、UTF_16とする
-    inputStream.bufferedReader(StandardCharsets.UTF_16).forEachLine {
+    // でも、バッチファイルで作ったテキストファイルはShift-JISらしいので、SHIFT_JISとする
+    inputStream.bufferedReader(Charset.forName("SHIFT_JIS")).forEachLine {
         if(it.isNotEmpty() && doAdd) {
             newNames.add(it)
             if(it[0] == '/') {
                 doAdd = false
             }
-            println("tree.txt: $it")
         }
     }
     return newNames
@@ -90,7 +85,22 @@ fun renameFiles(dirList: Array<String>, newNames: MutableList<String>) {
     var i = 0
     dirList.forEach {
         //ファイル名変更実行
-        println("renaming: $it <- " + newNames[i])
         File(it).renameTo(File(newNames[i++]))
     }
+}
+
+/*  confirm
+    一括変名を実行する前に、ユーザーに確認を促す
+ */
+fun confirm(dirList: Array<String>, newNames: MutableList<String>) : Boolean {
+
+    var i = 0
+    dirList.forEach {
+        // 変名イメージ出力
+        println("renaming: $it <- " + newNames[i++])
+    }
+    println("余計なファイルがないこと、順序が正しいことを確認してください")
+    print("よろしいですか?(yes/ ) ")
+
+    return readLine().equals("yes")
 }
