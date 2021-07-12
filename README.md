@@ -4,8 +4,13 @@ Rename all files in the target directory with the contents of `./tree.txt`.
 
 ## Usage
 1. Move current directory to target directory.
-2. create `tree.txt` file (ex. tree -f | sort > tree.txt)
+2. create `tree.txt` file (ex. maketree.bat)
 3. rentree
+
+## Encode
+`tree` command output UTF-16 Text.  
+But `maketree.bat` output Shift-JIS.  
+The condition is that 'tree.txt' is encoded in Shift-JIS.
 
 ## Development Environment
 
